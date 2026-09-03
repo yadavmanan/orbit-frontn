@@ -254,6 +254,35 @@ export function SettingsPage() {
           <section className="policy-panel">
             <div className="policy-panel-header policy-panel-header-split">
               <div>
+                <p className="policy-kicker">Protected operations</p>
+                <h2>Protected shifts and profile</h2>
+              </div>
+              <button
+                type="button"
+                className="button button-primary policy-save-button"
+                onClick={handleSavePolicy}
+                disabled={saving}
+                toolname="save_policy_profile"
+                tooldescription="Save and update active policy safety constraints and thresholds"
+                toolaction="click"
+              >
+                {saving ? 'Saving...' : 'Save Policy Profile'}
+              </button>
+            </div>
+
+            <div className="policy-shift-list">
+              {constraints.protected_shifts.map((shift) => (
+                <div className="policy-shift-item" key={shift}>
+                  <span className="policy-shift-marker" aria-hidden="true" />
+                  <span className="policy-shift-text">{shift}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="policy-panel">
+            <div className="policy-panel-header policy-panel-header-split">
+              <div>
                 <p className="policy-kicker">System maintenance</p>
                 <h2>Reset and recalibrate</h2>
               </div>
@@ -262,6 +291,9 @@ export function SettingsPage() {
                 className="button button-secondary"
                 onClick={handleResetBaseline}
                 disabled={resetting}
+                toolname="reset_baseline_settings"
+                tooldescription="Reset database and simulator back to baseline calibrated state"
+                toolaction="click"
               >
                 {resetting ? 'Resetting...' : 'Reset Baseline'}
               </button>

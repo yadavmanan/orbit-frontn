@@ -168,6 +168,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               disabled={triggering}
               onClick={() => handleTriggerPreset('stroke_spike')}
               title="Inject sudden acute stroke CTA influx at East River Trauma"
+              toolname="trigger_stroke_spike"
+              tooldescription="Inject sudden acute stroke CTA influx scenario at East River Trauma"
+              toolaction="click"
             >
               ⚡ Stroke STAT Spike
             </button>
@@ -177,6 +180,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               disabled={triggering}
               onClick={() => handleTriggerPreset('scanner_outage')}
               title="Simulate cryogenic hardware fault on North Campus 3.0T MRI"
+              toolname="trigger_scanner_outage"
+              tooldescription="Simulate cryogenic hardware fault scenario on North Campus 3.0T MRI"
+              toolaction="click"
             >
               ❄️ Scanner Fault
             </button>
@@ -186,6 +192,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               disabled={triggering}
               onClick={() => handleTriggerPreset('neuro_surge')}
               title="Spike pediatric brain tumor cases & test licensure checks"
+              toolname="trigger_neuro_surge"
+              tooldescription="Spike pediatric brain tumor cases and test licensure checks"
+              toolaction="click"
             >
               Neuro Surge
             </button>
@@ -195,6 +204,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               disabled={triggering}
               onClick={() => handleTriggerPreset('tech_shortage')}
               title="Simulate staff sick call & activate tele-proctoring"
+              toolname="trigger_tech_shortage"
+              tooldescription="Simulate staff sick call and activate remote tele-proctoring"
+              toolaction="click"
             >
               Tech Shortage
             </button>
@@ -204,6 +216,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               disabled={triggering}
               onClick={() => handleTriggerPreset('reset')}
               title="Restore baseline calibrated state"
+              toolname="reset_demo_baseline"
+              tooldescription="Restore system and radiology network back to calibrated baseline state"
+              toolaction="click"
             >
               Reset Baseline
             </button>

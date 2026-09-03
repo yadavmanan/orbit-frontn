@@ -10,11 +10,18 @@ interface ModelContextTool {
   execute: (input: Record<string, unknown>, options: { signal: AbortSignal }) => Promise<unknown>;
 }
 
+interface ModelContext {
+  registerTool: (tool: ModelContextTool, options?: { signal?: AbortSignal }) => Promise<void>;
+  unregisterTool?: (name: string) => Promise<void>;
+  getTools?: () => Promise<ModelContextTool[]>;
+}
+
 declare global {
   interface Document {
-    modelContext?: {
-      registerTool: (tool: ModelContextTool, options?: { signal?: AbortSignal }) => Promise<void>;
-    };
+    modelContext?: ModelContext;
+  }
+  interface Navigator {
+    modelContext?: ModelContext;
   }
 }
 
@@ -30,8 +37,37 @@ export interface WebMcpRegistrationResult {
   registeredTools: number;
 }
 
+/** Synchronizes modelContext between document and navigator so both APIs are accessible */
+export function syncModelContextBridges(): void {
+  if (typeof document !== 'undefined' && typeof navigator !== 'undefined') {
+    const docContext = document.modelContext;
+    const navContext = (navigator as { modelContext?: ModelContext }).modelContext;
+
+    if (docContext && !navContext) {
+      (navigator as { modelContext?: ModelContext }).modelContext = docContext;
+    } else if (navContext && !docContext) {
+      document.modelContext = navContext;
+    }
+  }
+}
+
+// Run initial bridge sync
+syncModelContextBridges();
+
+export function getModelContext(): ModelContext | undefined {
+  syncModelContextBridges();
+  if (typeof document !== 'undefined' && document.modelContext) {
+    return document.modelContext;
+  }
+  if (typeof navigator !== 'undefined' && (navigator as { modelContext?: ModelContext }).modelContext) {
+    return (navigator as { modelContext?: ModelContext }).modelContext;
+  }
+  return undefined;
+}
+
 export function hasWebMcpSupport(): boolean {
-  return typeof document.modelContext?.registerTool === 'function';
+  const modelContext = getModelContext();
+  return typeof modelContext?.registerTool === 'function';
 }
 
 /** Resolves a proposal/move id pair the same way the human Approval Queue buttons do. */
@@ -66,16 +102,12 @@ async function postJson(path: string, body?: Record<string, unknown>) {
  * out of the agent-facing surface and remain a human-only action in Settings.
  */
 export async function registerWebMcpTools(bindings: WebMcpBindings, signal: AbortSignal): Promise<WebMcpRegistrationResult> {
-  if (!hasWebMcpSupport()) {
+  const modelContext = getModelContext();
+  if (!modelContext || typeof modelContext.registerTool !== 'function') {
     return { supported: false, registeredTools: 0 };
   }
 
-  const modelContext = document.modelContext;
-  if (!modelContext) {
-    return { supported: false, registeredTools: 0 };
-  }
-
-  const { registerTool } = modelContext;
+  const registerTool = modelContext.registerTool.bind(modelContext);
   const registrations: Array<Promise<void>> = [];
 
   // ---------- Read-only tools ----------

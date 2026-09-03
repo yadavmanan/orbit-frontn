@@ -121,13 +121,37 @@ export function ProposalEntry({ proposal, onAction }: ProposalEntryProps) {
       ) : null}
 
       <div className="proposal-tools-bar">
-        <button type="button" className="tool-btn" onClick={() => setShowAiModal(true)} title="View AI clinical rationale and confidence metrics">
+        <button
+          type="button"
+          className="tool-btn"
+          onClick={() => setShowAiModal(true)}
+          title="View AI clinical rationale and confidence metrics"
+          toolname="view_ai_brief"
+          tooldescription="View AI clinical rationale and confidence metrics for this proposal"
+          toolaction="click"
+        >
           AI Brief
         </button>
-        <button type="button" className="tool-btn" onClick={() => handleOpenDraftModal('patient')} title="Generate draft notifications">
+        <button
+          type="button"
+          className="tool-btn"
+          onClick={() => handleOpenDraftModal('patient')}
+          title="Generate draft notifications"
+          toolname="draft_notification_alerts"
+          tooldescription="Generate unsent draft notifications for patients or clinical staff"
+          toolaction="click"
+        >
           Alerts
         </button>
-        <button type="button" className="tool-btn" onClick={handleOpenSimModal} title="Run scenario simulation">
+        <button
+          type="button"
+          className="tool-btn"
+          onClick={handleOpenSimModal}
+          title="Run scenario simulation"
+          toolname="run_scenario_simulation"
+          tooldescription="Run deterministic scenario simulation for this rebalance proposal"
+          toolaction="click"
+        >
           Simulate
         </button>
       </div>
@@ -135,16 +159,37 @@ export function ProposalEntry({ proposal, onAction }: ProposalEntryProps) {
       <div className="proposal-actions">
         {proposal.status === 'pending' ? (
           <>
-            <button type="button" className="button button-primary" onClick={() => onAction(proposal.id, 'approve')}>
+            <button
+              type="button"
+              className="button button-primary"
+              onClick={() => onAction(proposal.id, 'approve')}
+              toolname="approve_move"
+              tooldescription="Approve this staged rebalance move in the human approval queue"
+              toolaction="click"
+            >
               Approve Move
             </button>
-            <button type="button" className="button button-reject" onClick={() => setShowRejectModal(true)}>
+            <button
+              type="button"
+              className="button button-reject"
+              onClick={() => setShowRejectModal(true)}
+              toolname="reject_move"
+              tooldescription="Reject this staged move and trigger Option B fallback rebalancing"
+              toolaction="click"
+            >
               Reject & Fallback
             </button>
           </>
         ) : null}
         {proposal.status === 'approved' ? (
-          <button type="button" className="button button-primary" onClick={() => onAction(proposal.id, 'execute')}>
+          <button
+            type="button"
+            className="button button-primary"
+            onClick={() => onAction(proposal.id, 'execute')}
+            toolname="execute_move"
+            tooldescription="Atomically execute this approved move across the radiology network"
+            toolaction="click"
+          >
             ⚡ Atomic Execute Move
           </button>
         ) : null}
@@ -301,7 +346,14 @@ export function ProposalEntry({ proposal, onAction }: ProposalEntryProps) {
               <button type="button" className="button button-secondary" onClick={() => setShowRejectModal(false)}>
                 Cancel
               </button>
-              <button type="button" className="button button-reject" onClick={handleConfirmReject}>
+              <button
+                type="button"
+                className="button button-reject"
+                onClick={handleConfirmReject}
+                toolname="confirm_rejection_cascade"
+                tooldescription="Confirm rejection and stage the next approved Option B fallback alternative"
+                toolaction="click"
+              >
                 Confirm Rejection & Cascade Option B
               </button>
             </div>
