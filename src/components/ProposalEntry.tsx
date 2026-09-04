@@ -200,7 +200,7 @@ export function ProposalEntry({ proposal, onAction }: ProposalEntryProps) {
         <div className="modal-backdrop" onClick={() => setShowAiModal(false)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Claude Sonnet 4.6 Clinical Rationale</h3>
+              <h3>Clinical Rationale</h3>
               <button type="button" className="close-btn" onClick={() => setShowAiModal(false)}>✕</button>
             </div>
             <div className="modal-body">
